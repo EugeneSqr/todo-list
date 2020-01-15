@@ -14,7 +14,23 @@ services:
       - service
   service:
     build: ./service
+    environment:
+      - DB_URL=postgresql://postgres:password@db:5432/todo_dev
+      - FLASK_RUN_PORT=8081
+      - FLASK_RUN_HOST=0.0.0.0
+      - FLASK_ENV=development
     volumes:
       - ./service:/usr/src/app
     ports:
       - "8081:8081"
+    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; flask run'
+    depends_on:
+      - db
+  db:
+    image: postgres:12-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+volumes:
+  postgres_data:
