@@ -37,6 +37,7 @@
     "webpack-preprocessor-loader": "^1.1.0"
   },
   "dependencies": {
+    "bootstrap": "^4.4.1",
     "cross-fetch": "^3.0.4",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
