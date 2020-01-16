@@ -1,3 +1,18 @@
+@body-margin: 0.5rem;
+@sorting-button-width: 5rem;
 body {
-  color: green
+  margin: @body-margin;
+}
+
+.todo-adder {
+  margin-top: 2*@body-margin;
+}
+
+.sorting-picker {
+  padding: 0;
+  margin-bottom: @body-margin;
+  button {
+    margin-left: @body-margin;
+    width: @sorting-button-width;
+  }
 }
