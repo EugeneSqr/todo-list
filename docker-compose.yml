@@ -15,7 +15,7 @@ services:
   service:
     build: ./service
     environment:
-      - DB_URL=postgresql://postgres:password@db:5432/todo_dev
+      - DATABASE_URL=postgresql://postgres:password@db:5432/todo_dev
       - FLASK_RUN_PORT=8081
       - FLASK_RUN_HOST=0.0.0.0
       - FLASK_ENV=development
@@ -28,6 +28,8 @@ services:
       - db
   db:
     image: postgres:12-alpine
+    environment:
+      - POSTGRES_DB=todo_dev
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     ports:
