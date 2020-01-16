@@ -1,2 +1,4 @@
 .idea
 web/node_modules
+web/.vimproject
+web/dist
