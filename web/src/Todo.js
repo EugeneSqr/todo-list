@@ -1,15 +1,18 @@
 'use strict';
 import React, {useState} from 'react';
 import classNames from 'classnames';
+import {useInput} from './customHooks';
 
 const inputGroupText = 'input-group-text';
-const lowPriority = 'Low';
-const mediumPriority = 'Medium';
-const highPriority = 'High';
+const priorityIcons = {
+  'Low': 'icon-upload',
+  'Medium': 'icon-ok-circle',
+  'High': 'icon-download',
+};
 
 export default function Todo({todo, onTodoRemove, onTodoUpdate}) {
   const done = useDone(todo.marked_done);
-  const name = useName(todo.name || '');
+  const name = useInput(todo.name);
   const priority = usePriority(todo.priority);
 
   return (<div className={getProgressClass()}>
@@ -19,53 +22,30 @@ export default function Todo({todo, onTodoRemove, onTodoUpdate}) {
       </div>
       <span className={inputGroupText}>{todo.id}</span>
     </div>
-    <input className='form-control' disabled={getDisabled()} {...name} />
+    <input
+      className='form-control'
+      disabled={getDisabled()}
+      onBlur={handleBlur}
+      {...name} />
     <div className='input-group-append'>
-      <button
-        data-priority={highPriority}
-        className={getPriorityClass(highPriority)}
-        disabled={getDisabled()}
-        {...priority}>
-        <i className='icon-upload'></i>
-      </button>
-      <button
-        data-priority={mediumPriority}
-        className={getPriorityClass(mediumPriority)}
-        disabled={getDisabled()}
-        {...priority}>
-        <i className='icon-ok-circle'></i>
-      </button>
-      <button
-        data-priority={lowPriority}
-        className={getPriorityClass(lowPriority)}
-        disabled={getDisabled()} {...priority}>
-        <i className='icon-download'></i>
-      </button>
+      {
+        Object.keys(priorityIcons).map(function(label, i) {
+          return (<button
+            key={i}
+            data-priority={label}
+            className={getPriorityClass(label)}
+            disabled={getDisabled()}
+            {...priority}>
+            <i className={priorityIcons[label]}></i>
+          </button>);
+        })
+      }
       <span className={inputGroupText}>{getFormattedDate()}</span>
       <button className='btn btn-secondary btn-sm' onClick={handleRemove}>
         <i className='icon-remove'></i>
       </button>
     </div>
   </div>);
-
-  function useName(initialName) {
-    const [name, setName] = useState(initialName);
-    function onChange(e) {
-      setName(e.target.value);
-    }
-
-    return {
-      value: name,
-      onChange,
-      onBlur: function() {
-        if (name !== initialName) {
-          onTodoUpdate(
-            todo.id,
-            Object.assign({}, todo, {name: name}));
-        }
-      },
-    };
-  }
 
   function useDone(initialDone) {
     const [done, setDone] = useState(initialDone);
@@ -120,6 +100,14 @@ export default function Todo({todo, onTodoRemove, onTodoUpdate}) {
 
   function getFormattedDate() {
     return new Date(todo.date_created).toLocaleDateString();
+  }
+
+  function handleBlur() {
+    if (name.value !== (todo.name || '')) {
+      onTodoUpdate(
+        todo.id,
+        Object.assign({}, todo, {name: name.value}));
+    }
   }
 
   function handleRemove() {

@@ -11,7 +11,8 @@ export default function App() {
   const todos = useTodos();
 
   return (<React.Fragment>
-    <AddTodo />
+    <AddTodo
+      onTodoAdd={useCallback(onTodoAdd, [])} />
     <SortingPicker
       currentSorting={'id'}
       onSortingChange={useCallback(onSortingChange, [])} />
@@ -34,12 +35,16 @@ export default function App() {
     return todos;
   }
 
+  function onTodoAdd(todo) {
+    console.log('todo added', todo);
+  }
+
   function onTodoRemove(id) {
     console.log('todo removed', id);
   }
 
-  function onTodoUpdate(id, data) {
-    console.log('todo updated', id, data);
+  function onTodoUpdate(id, todo) {
+    console.log('todo updated', id, todo);
   }
 
   function onSortingChange(newSorting) {
