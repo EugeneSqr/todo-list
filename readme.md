@@ -25,7 +25,7 @@ Rename the remote again
 ```
 git remote rename heroku heroku-web
 ```
-3. At this point we have two Heroku apps and a git repo with at least three remotes: `origin`, `heroku-service`, `heroku-web`. We're going to use subrees to deploy `service` and `web` indepentently
+3. At this point we have `two` Heroku apps and a git repo with at least `three` remotes: `origin`, `heroku-service`, `heroku-web`. We're going to use subrees to deploy `service` and `web` indepentently
 ```
 git subtree split --prefix service -b service
 git push -f heroku-service service:master
