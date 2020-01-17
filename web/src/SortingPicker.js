@@ -2,14 +2,23 @@
 import React, {useState} from 'react';
 import classNames from 'classnames';
 
-function SortingPicker({currentSorting, onSortingChange}) {
+const sortings = [
+  ['done', 'marked_done'],
+  ['id', 'id'],
+  ['name', 'name'],
+  ['created', 'created'],
+  ['priority', 'priority'],
+];
+
+export default function SortingPicker({currentSorting, onSortingChange}) {
   const sorting = useSorting(currentSorting);
   return (
     <div className="container-fluid sorting-picker">
       <span>Sort by:</span>
       {
-        ['done', 'id', 'name', 'created', 'priority'].map(function(label, i) {
-          return (<button key={i} {...getButtonAttrs(label)}>{label}</button>);
+        sortings.map(function(pair, i) {
+          return (<button
+            key={i} {...getButtonAttrs(pair[1])}>{pair[0]}</button>);
         })
       }
     </div>
@@ -46,5 +55,3 @@ function SortingPicker({currentSorting, onSortingChange}) {
     });
   }
 }
-
-export default React.memo(SortingPicker);

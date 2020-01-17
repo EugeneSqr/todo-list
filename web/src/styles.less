@@ -1,5 +1,7 @@
 @body-margin: 0.5rem;
 @sorting-button-width: 5rem;
+@id-field-width: 5rem;
+@date-field-width: 7rem;
 
 @todo-original-opacity: 1;
 body {
@@ -27,4 +29,20 @@ body {
 .inprogress {
   text-decoration: none;
   opacity: @todo-original-opacity;
+}
+
+.id-field {
+  width: @id-field-width;
+  .list-cell()
+}
+
+.date-field {
+  width: @date-field-width;
+  .list-cell()
+}
+
+.list-cell {
+  display: block;
+  text-align: center;
+  overflow: hidden;
 }

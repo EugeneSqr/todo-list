@@ -1,53 +1,53 @@
 'use strict';
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useEffect} from 'react';
+import _ from 'lodash';
 import AddTodo from './AddTodo';
 import SortingPicker from './SortingPicker';
 import TodoList from './TodoList';
 import {
   getTodos,
 } from './todoProvider';
+import {
+  addToList,
+  removeFromList,
+  updateSingleInList,
+} from './todoListUtils';
 
 export default function App() {
-  const todos = useTodos();
+  const [sorting, setSorting] = useState('id');
+  const [todos, setTodos] = useState();
+  useEffect(function() {
+    if (todos) {
+      return;
+    }
+
+    getTodos().then((todoList) => setTodos(todoList));
+  });
 
   return (<React.Fragment>
-    <AddTodo
-      onTodoAdd={useCallback(onTodoAdd, [])} />
+    <AddTodo onTodoAdd={onTodoAdd} />
     <SortingPicker
-      currentSorting={'id'}
-      onSortingChange={useCallback(onSortingChange, [])} />
+      currentSorting={sorting}
+      onSortingChange={onSortingChange} />
     <TodoList
-      todos={todos}
+      todos={_.sortBy(todos, [sorting])}
       onTodoRemove={onTodoRemove}
       onTodoUpdate={onTodoUpdate} />
   </React.Fragment>);
 
-  function useTodos() {
-    const [todos, setTodos] = useState();
-    useEffect(function() {
-      if (todos) {
-        return;
-      }
-
-      getTodos().then((todoList) => setTodos(todoList));
-    });
-
-    return todos;
-  }
-
   function onTodoAdd(todo) {
-    console.log('todo added', todo);
+    setTodos(addToList(todos, todo));
   }
 
-  function onTodoRemove(id) {
-    console.log('todo removed', id);
+  function onTodoRemove(todo) {
+    setTodos(removeFromList(todos, todo));
   }
 
-  function onTodoUpdate(id, todo) {
-    console.log('todo updated', id, todo);
+  function onTodoUpdate(todo) {
+    setTodos(updateSingleInList(todos, todo));
   }
 
   function onSortingChange(newSorting) {
-    console.log('sorting changed', newSorting);
+    setSorting(newSorting);
   }
 }

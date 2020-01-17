@@ -26,7 +26,7 @@ export default function Todo({todo, onTodoRemove, onTodoUpdate}) {
           checked={done}
           onChange={doneChanged}/>
       </div>
-      <span className={inputGroupText}>{todo.id}</span>
+      <span className={classNames(inputGroupText, 'id-field')}>{todo.id}</span>
     </div>
     <input
       className='form-control'
@@ -48,7 +48,9 @@ export default function Todo({todo, onTodoRemove, onTodoUpdate}) {
           </button>);
         })
       }
-      <span className={inputGroupText}>{getFormattedDate()}</span>
+      <span className={classNames(inputGroupText, 'date-field')}>
+        {getFormattedDate()}
+      </span>
       <button className='btn btn-secondary btn-sm' onClick={handleRemove}>
         <i className='icon-remove'></i>
       </button>
@@ -98,7 +100,7 @@ export default function Todo({todo, onTodoRemove, onTodoUpdate}) {
 
   function handleUpdate(newTodo) {
     updateTodo(newTodo)
-      .then(() => onTodoUpdate(newTodo.id, newTodo))
+      .then(() => onTodoUpdate(newTodo))
       .catch(() => rollbackUpdate());
   }
 
@@ -109,6 +111,6 @@ export default function Todo({todo, onTodoRemove, onTodoUpdate}) {
   }
 
   function handleRemove() {
-    removeTodo(todo.id).then(() => onTodoRemove(todo.id));
+    removeTodo(todo.id).then(() => onTodoRemove(todo));
   }
 }
