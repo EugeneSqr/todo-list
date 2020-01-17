@@ -6,7 +6,7 @@ import {
 
 export function getTodos() {
   return fetch(getTodoListUrl()).then(function(response) {
-    if (response.status != 200) {
+    if (response.status !== 200) {
       return [];
     }
 
@@ -17,10 +17,30 @@ export function getTodos() {
   });
 }
 
-export function addTodo() {
+export function addTodo(todo) {
+  return fetch(getTodoListUrl(), {
+    method: 'POST',
+    body: JSON.stringify(todo),
+    headers: getHeaders(),
+  }).then(function(response) {
+    if (response.status !== 201) {
+      throw new Error('unable to add todo');
+    }
+
+    return response.json();
+  }).catch((error) => console.log(error));
 }
 
-export function updateTodo() {
+export function updateTodo(todo) {
+  return fetch(getTodoUrl(todo.id), {
+    method: 'PUT',
+    body: JSON.stringify(todo),
+    headers: getHeaders(),
+  }).then(function(response) {
+    if (response.status !== 204) {
+      throw new Error('failed to update the todo');
+    }
+  });
 }
 
 export function removeTodo() {
@@ -28,4 +48,14 @@ export function removeTodo() {
 
 function getTodoListUrl() {
   return `${getServiceUrl()}/todos`;
+}
+
+function getTodoUrl(id) {
+  return `${getServiceUrl()}/todos/${id}`;
+}
+
+function getHeaders() {
+  return {
+    'Content-Type': 'application/json',
+  };
 }

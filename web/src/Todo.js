@@ -1,7 +1,9 @@
 'use strict';
 import React, {useState} from 'react';
 import classNames from 'classnames';
-import {useInput} from './customHooks';
+import {
+  updateTodo,
+} from './todoProvider';
 
 const inputGroupText = 'input-group-text';
 const priorityIcons = {
@@ -11,14 +13,17 @@ const priorityIcons = {
 };
 
 export default function Todo({todo, onTodoRemove, onTodoUpdate}) {
-  const done = useDone(todo.marked_done);
-  const name = useInput(todo.name);
-  const priority = usePriority(todo.priority);
+  const [done, setDone] = useState(todo.marked_done);
+  const [name, setName] = useState(todo.name || '');
+  const [priority, setPriority] = useState(todo.priority);
 
   return (<div className={getProgressClass()}>
     <div className='input-group-prepend'>
       <div className={inputGroupText}>
-        <input type='checkbox' {...done} />
+        <input
+          type='checkbox'
+          checked={done}
+          onChange={doneChanged}/>
       </div>
       <span className={inputGroupText}>{todo.id}</span>
     </div>
@@ -26,7 +31,8 @@ export default function Todo({todo, onTodoRemove, onTodoUpdate}) {
       className='form-control'
       disabled={getDisabled()}
       onBlur={handleBlur}
-      {...name} />
+      value={name}
+      onChange={(e) => setName(e.target.value)} />
     <div className='input-group-append'>
       {
         Object.keys(priorityIcons).map(function(label, i) {
@@ -35,7 +41,8 @@ export default function Todo({todo, onTodoRemove, onTodoUpdate}) {
             data-priority={label}
             className={getPriorityClass(label)}
             disabled={getDisabled()}
-            {...priority}>
+            value={priority}
+            onClick={changePriority}>
             <i className={priorityIcons[label]}></i>
           </button>);
         })
@@ -47,55 +54,35 @@ export default function Todo({todo, onTodoRemove, onTodoUpdate}) {
     </div>
   </div>);
 
-  function useDone(initialDone) {
-    const [done, setDone] = useState(initialDone);
-    function onChange(e) {
-      setDone(e.target.checked);
-      onTodoUpdate(
-        todo.id,
-        Object.assign({}, todo, {marked_done: e.target.checked}));
-    }
-
-    return {
-      checked: done,
-      onChange,
-    };
+  function doneChanged(e) {
+    setDone(e.target.checked);
+    handleUpdate(Object.assign({}, todo, {marked_done: e.target.checked}));
   }
 
-  function usePriority(initialPriority) {
-    const [priority, setPriority] = useState(initialPriority);
-    function onClick(e) {
-      const newPriority = e.currentTarget.getAttribute('data-priority');
-      if (priority !== newPriority) {
-        setPriority(newPriority);
-        onTodoUpdate(
-          todo.id,
-          Object.assign({}, todo, {priority: newPriority}));
-      }
+  function changePriority(e) {
+    const newPriority = e.currentTarget.getAttribute('data-priority');
+    if (priority !== newPriority) {
+      setPriority(newPriority);
+      handleUpdate(Object.assign({}, todo, {priority: newPriority}));
     }
-
-    return {
-      value: priority,
-      onClick,
-    };
   }
 
   function getPriorityClass(buttonPriority) {
     return classNames('btn btn-sm', {
-      'btn-outline-primary': priority.value === buttonPriority,
-      'btn-outline-secondary': priority.value !== buttonPriority,
+      'btn-outline-primary': priority === buttonPriority,
+      'btn-outline-secondary': priority !== buttonPriority,
     });
   }
 
   function getProgressClass() {
     return classNames('input-group mb-2', {
-      'done': done.checked,
-      'inprogress': !done.checked,
+      'done': done,
+      'inprogress': !done,
     });
   }
 
   function getDisabled() {
-    return done.checked ? 'disabled' : '';
+    return done ? 'disabled' : '';
   }
 
   function getFormattedDate() {
@@ -103,11 +90,21 @@ export default function Todo({todo, onTodoRemove, onTodoUpdate}) {
   }
 
   function handleBlur() {
-    if (name.value !== (todo.name || '')) {
-      onTodoUpdate(
-        todo.id,
-        Object.assign({}, todo, {name: name.value}));
+    if (name !== (todo.name || '')) {
+      handleUpdate(Object.assign({}, todo, {name}));
     }
+  }
+
+  function handleUpdate(newTodo) {
+    updateTodo(newTodo)
+      .then(() => onTodoUpdate(newTodo.id, newTodo))
+      .catch(() => rollbackUpdate());
+  }
+
+  function rollbackUpdate() {
+    setName(todo.name || '');
+    setDone(todo.done);
+    setPriority(todo.priority);
   }
 
   function handleRemove() {

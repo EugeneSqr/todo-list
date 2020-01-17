@@ -7,7 +7,8 @@ from .schema import todo_list_schema, todo_schema
 
 class TodoListResource(Resource):
     def get(self):
-        return todo_list_schema.dump(TodoModel.query.all())
+        return todo_list_schema.dump(
+            TodoModel.query.order_by(TodoModel.id).all())
 
     def post(self):
         json_data = request.get_json()
