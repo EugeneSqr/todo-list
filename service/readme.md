@@ -1,5 +1,5 @@
 ### Overview
-This is a backend part of the app
+This is a backend part of the app.
 
 ### Development database
 The database gets created automatically when `db` container is built. It stays there until the container is destroyed. You can preserve the database across coding sessions by
