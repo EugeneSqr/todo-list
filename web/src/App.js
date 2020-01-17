@@ -1,5 +1,5 @@
 'use strict';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import AddTodo from './AddTodo';
 import SortingPicker from './SortingPicker';
 import TodoList from './TodoList';
@@ -12,7 +12,9 @@ export default function App() {
 
   return (<React.Fragment>
     <AddTodo />
-    <SortingPicker />
+    <SortingPicker
+      currentSorting={'id'}
+      onSortingChange={useCallback(onSortingChange, [])} />
     <TodoList
       todos={todos}
       onTodoRemove={onTodoRemove}
@@ -38,5 +40,9 @@ export default function App() {
 
   function onTodoUpdate(id, data) {
     console.log('todo updated', id, data);
+  }
+
+  function onSortingChange(newSorting) {
+    console.log('sorting changed', newSorting);
   }
 }
