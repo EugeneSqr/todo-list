@@ -16,7 +16,7 @@ heroku create todo-list-serviceapp
 The CLI creates a remote named 'heroku' in the repository. Rename it to heroku-service
 ```
 git remote rename heroku heroku-service
-
+```
 2. Create second Heroku app for web
 ```
 heroku create todo-list-webapp
