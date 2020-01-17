@@ -1,5 +1,7 @@
 @body-margin: 0.5rem;
 @sorting-button-width: 5rem;
+
+@todo-original-opacity: 1;
 body {
   margin: @body-margin;
 }
@@ -15,4 +17,14 @@ body {
     margin-left: @body-margin;
     width: @sorting-button-width;
   }
+}
+
+.done {
+  text-decoration: line-through;
+  opacity: @todo-original-opacity / 2;
+}
+
+.inprogress {
+  text-decoration: none;
+  opacity: @todo-original-opacity;
 }

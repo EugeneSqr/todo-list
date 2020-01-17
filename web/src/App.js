@@ -1,13 +1,31 @@
 'use strict';
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import AddTodo from './AddTodo';
 import SortingPicker from './SortingPicker';
 import TodoList from './TodoList';
+import {
+  getTodos,
+} from './todoProvider';
 
-export default function App() {
+export default React.memo(function App() {
+  const todos = useTodos();
+
+  function useTodos() {
+    const [todos, setTodos] = useState();
+    useEffect(function() {
+      if (todos) {
+        return;
+      }
+
+      getTodos().then((todoList) => setTodos(todoList));
+    });
+
+    return todos;
+  }
+
   return (<React.Fragment>
     <AddTodo />
     <SortingPicker />
-    <TodoList />
+    <TodoList todos={todos} />
   </React.Fragment>);
-}
+});

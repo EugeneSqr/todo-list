@@ -4,7 +4,7 @@ services:
   web:
     build: ./web
     environment:
-      - SERVICE_URL=http://localhost:8081
+      - TODO_SERVICE_URL=http://localhost:8081
     volumes:
       - ./web:/usr/src/app
       - /usr/src/app/node_modules

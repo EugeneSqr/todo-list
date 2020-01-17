@@ -1,11 +1,13 @@
 from flask import Flask
 from flask_restful import Api
+from flask_cors import CORS
 from .todo_list_resource import TodoListResource
 from .todo_resource import TodoResource
 
 
 def create_app():
     app = Flask(__name__)
+    CORS(app)
     app.config.from_object('application.settings')
 
     api = Api(app)

@@ -2,11 +2,12 @@
 import React from 'react';
 import Todo from './Todo';
 
-export default function TodoList() {
-  return (<React.Fragment>
-    <Todo />
-    <Todo />
-    <Todo />
-    <Todo />
-  </React.Fragment>);
-}
+export default React.memo(function TodoList({todos}) {
+  if (!todos || !todos.length) {
+    return null;
+  }
+
+  return todos.map((todo) => (
+    <Todo key={todo.id} todo={todo} />
+  ));
+});
