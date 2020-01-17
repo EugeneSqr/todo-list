@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import classNames from 'classnames';
 import {
   updateTodo,
+  removeTodo,
 } from './todoProvider';
 
 const inputGroupText = 'input-group-text';
@@ -108,6 +109,6 @@ export default function Todo({todo, onTodoRemove, onTodoUpdate}) {
   }
 
   function handleRemove() {
-    onTodoRemove(todo.id);
+    removeTodo(todo.id).then(() => onTodoRemove(todo.id));
   }
 }

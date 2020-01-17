@@ -28,7 +28,7 @@ export function addTodo(todo) {
     }
 
     return response.json();
-  }).catch((error) => console.log(error));
+  });
 }
 
 export function updateTodo(todo) {
@@ -43,7 +43,14 @@ export function updateTodo(todo) {
   });
 }
 
-export function removeTodo() {
+export function removeTodo(id) {
+  return fetch(getTodoUrl(id), {
+    method: 'DELETE',
+  }).then(function(response) {
+    if (response.status !== 204) {
+      throw new Error('failed to delete');
+    }
+  });
 }
 
 function getTodoListUrl() {
