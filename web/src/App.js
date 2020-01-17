@@ -7,8 +7,17 @@ import {
   getTodos,
 } from './todoProvider';
 
-export default React.memo(function App() {
+export default function App() {
   const todos = useTodos();
+
+  return (<React.Fragment>
+    <AddTodo />
+    <SortingPicker />
+    <TodoList
+      todos={todos}
+      onTodoRemove={onTodoRemove}
+      onTodoUpdate={onTodoUpdate} />
+  </React.Fragment>);
 
   function useTodos() {
     const [todos, setTodos] = useState();
@@ -23,9 +32,11 @@ export default React.memo(function App() {
     return todos;
   }
 
-  return (<React.Fragment>
-    <AddTodo />
-    <SortingPicker />
-    <TodoList todos={todos} />
-  </React.Fragment>);
-});
+  function onTodoRemove(id) {
+    console.log('todo removed', id);
+  }
+
+  function onTodoUpdate(id, data) {
+    console.log('todo updated', id, data);
+  }
+}
