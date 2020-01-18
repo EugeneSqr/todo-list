@@ -1,43 +1,44 @@
-@body-margin: 0.5rem;
-@sorting-button-width: 5rem;
-@id-field-width: 5rem;
-@date-field-width: 7rem;
+@margin: 0.5rem;
+@padding: 0;
+@width: 5rem;
+@tooltip-color: #6c757d;
+@tooltip-text-color: white;
+@opacity: 1;
 
-@todo-original-opacity: 1;
 body {
-  margin: @body-margin;
+  margin: @margin;
 }
 
 .todo-adder {
-  margin-top: 2*@body-margin;
+  margin-top: 2 * @margin;
 }
 
 .sorting-picker {
-  padding: 0;
-  margin-bottom: @body-margin;
+  padding: @padding;
+  margin-bottom: @margin;
   button {
-    margin-left: @body-margin;
-    width: @sorting-button-width;
+    margin-left: @margin;
+    width: @width;
   }
 }
 
 .done {
   text-decoration: line-through;
-  opacity: @todo-original-opacity / 2;
+  opacity: @opacity / 2;
 }
 
 .inprogress {
   text-decoration: none;
-  opacity: @todo-original-opacity;
+  opacity: @opacity;
 }
 
 .id-field {
-  width: @id-field-width;
+  width: @width;
   .list-cell()
 }
 
 .date-field {
-  width: @date-field-width;
+  width: @width + 2;
   .list-cell()
 }
 
@@ -45,4 +46,30 @@ body {
   display: block;
   text-align: center;
   overflow: hidden;
+}
+
+[data-tooltip] {
+  &:hover {
+    &:before, &:after {
+      display: block;
+      position: absolute;
+      color: @tooltip-text-color;
+    }
+    &:before {
+      border-radius: @margin / 2;
+      content: attr(title);
+      background-color: @tooltip-color;
+      margin-top: -2.9rem;
+      padding: 0.3rem;
+    }
+    &:after {
+      content: '';
+      margin-top: -2.5rem;
+      margin-left: @margin;
+      border-style: solid;
+      border-color: transparent;
+      border-top-color: @tooltip-color;
+      border-width: @margin @margin 0 @margin;
+    }
+  }
 }

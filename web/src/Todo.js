@@ -8,9 +8,18 @@ import {
 
 const inputGroupText = 'input-group-text';
 const priorityIcons = {
-  'icon-upload': 0,
-  'icon-ok-circle': 1,
-  'icon-download': 2,
+  'icon-upload': {
+    name: 'High',
+    value: 0,
+  },
+  'icon-time': {
+    name: 'Medium',
+    value: 1,
+  },
+  'icon-download': {
+    name: 'Low',
+    value: 2,
+  },
 };
 
 export default function Todo({todo, onTodoRemove, onTodoUpdate}) {
@@ -39,8 +48,10 @@ export default function Todo({todo, onTodoRemove, onTodoUpdate}) {
         Object.keys(priorityIcons).map(function(icon, index) {
           return (<button
             key={index}
-            data-priority={priorityIcons[icon]}
-            className={getPriorityClass(priorityIcons[icon])}
+            data-tooltip
+            title={priorityIcons[icon].name}
+            data-priority={priorityIcons[icon].value}
+            className={getPriorityClass(priorityIcons[icon].value)}
             disabled={getDisabled()}
             value={priority}
             onClick={changePriority}>
@@ -71,7 +82,7 @@ export default function Todo({todo, onTodoRemove, onTodoUpdate}) {
   }
 
   function getPriorityClass(buttonPriority) {
-    return classNames('btn btn-sm', {
+    return classNames('btn', {
       'btn-outline-primary': priority === buttonPriority,
       'btn-outline-secondary': priority !== buttonPriority,
     });
