@@ -1,9 +1,9 @@
 'use strict';
 import React, {useState, useEffect} from 'react';
-import _ from 'lodash';
 import AddTodo from './AddTodo';
 import SortingPicker from './SortingPicker';
 import TodoList from './TodoList';
+import sort from './todoListSorter';
 import {
   getTodos,
 } from './todoProvider';
@@ -30,7 +30,7 @@ export default function App() {
       currentSorting={sorting}
       onSortingChange={onSortingChange} />
     <TodoList
-      todos={_.sortBy(todos, [sorting])}
+      todos={sort(todos, [sorting])}
       onTodoRemove={onTodoRemove}
       onTodoUpdate={onTodoUpdate} />
   </React.Fragment>);
