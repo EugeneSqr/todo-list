@@ -6,7 +6,7 @@ const sortings = [
   ['done', 'marked_done'],
   ['id', 'id'],
   ['name', 'name'],
-  ['created', 'created'],
+  ['created', 'date_created'],
   ['priority', 'priority'],
 ];
 
