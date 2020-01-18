@@ -8,9 +8,9 @@ import {
 
 const inputGroupText = 'input-group-text';
 const priorityIcons = {
-  'Low': 'icon-upload',
-  'Medium': 'icon-ok-circle',
-  'High': 'icon-download',
+  'icon-upload': 0,
+  'icon-ok-circle': 1,
+  'icon-download': 2,
 };
 
 export default function Todo({todo, onTodoRemove, onTodoUpdate}) {
@@ -36,15 +36,15 @@ export default function Todo({todo, onTodoRemove, onTodoUpdate}) {
       onChange={(e) => setName(e.target.value)} />
     <div className='input-group-append'>
       {
-        Object.keys(priorityIcons).map(function(label, i) {
+        Object.keys(priorityIcons).map(function(icon, index) {
           return (<button
-            key={i}
-            data-priority={label}
-            className={getPriorityClass(label)}
+            key={index}
+            data-priority={priorityIcons[icon]}
+            className={getPriorityClass(priorityIcons[icon])}
             disabled={getDisabled()}
             value={priority}
             onClick={changePriority}>
-            <i className={priorityIcons[label]}></i>
+            <i className={icon}></i>
           </button>);
         })
       }
@@ -63,7 +63,7 @@ export default function Todo({todo, onTodoRemove, onTodoUpdate}) {
   }
 
   function changePriority(e) {
-    const newPriority = e.currentTarget.getAttribute('data-priority');
+    const newPriority = parseInt(e.currentTarget.getAttribute('data-priority'));
     if (priority !== newPriority) {
       setPriority(newPriority);
       handleUpdate(Object.assign({}, todo, {priority: newPriority}));

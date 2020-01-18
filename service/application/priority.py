@@ -2,6 +2,6 @@ import enum
 
 
 class Priority(enum.Enum):
-    high = 'High'
-    medium = 'Medium'
-    low = 'Low'
+    high = 0
+    medium = 1
+    low = 2
