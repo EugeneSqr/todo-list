@@ -1,4 +1,5 @@
 from datetime import datetime
+from sqlalchemy.orm import validates
 from flask_sqlalchemy import SQLAlchemy
 from .priority import Priority
 
@@ -12,6 +13,17 @@ class TodoModel(db.Model):
     priority = db.Column(db.Enum(Priority), default=Priority.medium)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
     marked_done = db.Column(db.Boolean, default=False)
+
+    @validates('name')
+    def truncate(self, field, value):
+        return self.truncate_to_field_length(field, value)
+
+    def truncate_to_field_length(self, field, value):
+        max_len = getattr(self.__class__, field).prop.columns[0].type.length
+        if value and len(value) > max_len:
+            return value[:max_len]
+        else:
+            return value
 
 
 def initialize():

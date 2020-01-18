@@ -15,6 +15,13 @@ def test_add_todo():
     assert body['id'] is not None
 
 
+def test_add_todo_truncates_long_names():
+    max_length = 300
+    code, body = insert_todo({'name': 'a'*(max_length + 1)})
+    assert code == 201
+    assert body['name'] == 'a'*max_length
+
+
 def test_add_todo_ignores_explicitly_set_ids():
     explicit_id = 412342
     code, body = insert_todo({'id': explicit_id, 'name': 'todo 1'})
