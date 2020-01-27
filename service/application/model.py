@@ -16,9 +16,6 @@ class TodoModel(db.Model):
     marked_done = db.Column(db.Boolean, default=False)
 
     @validates('name')
-    def truncate(self, field, value):
-        return self.truncate_to_field_length(field, value)
-
     def truncate_to_field_length(self, field, value):
         max_len = getattr(self.__class__, field).prop.columns[0].type.length
         if value and len(value) > max_len:
