@@ -1,6 +1,7 @@
 from datetime import datetime
-from sqlalchemy.orm import validates
+from flask import current_app
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import validates
 from .priority import Priority
 
 db = SQLAlchemy()
@@ -27,6 +28,5 @@ class TodoModel(db.Model):
 
 
 def initialize():
-    from flask import current_app
     db.init_app(current_app)
     db.create_all()
