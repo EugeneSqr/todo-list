@@ -3,6 +3,7 @@ from flask_restful import Api
 from flask_cors import CORS
 from .todo_list_resource import TodoListResource
 from .todo_resource import TodoResource
+from . import model
 
 
 def create_app():
@@ -14,7 +15,6 @@ def create_app():
     api.add_resource(TodoListResource, '/todos')
     api.add_resource(TodoResource, '/todos/<int:todo_id>')
 
-    from . import model
     with app.app_context():
         model.initialize()
 
