@@ -9,7 +9,7 @@ class TodoResource(Resource):
     def put(self, todo_id):
         json_data = request.get_json()
         if not json_data:
-            return {"message": "No input data provided"}, 400
+            return 'No input data provided', 400
         try:
             data = todo_schema.load(json_data)
         except ValidationError as err:
