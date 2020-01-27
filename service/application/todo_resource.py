@@ -15,12 +15,9 @@ class TodoResource(Resource):
         except ValidationError as err:
             return err.messages, 400
 
-        todo_item = TodoModel.query.get_or_404(todo_id)
-        todo_item.name = data['name']
-        todo_item.priority = data['priority']
-        todo_item.marked_done = data['marked_done']
+        items_updated = TodoModel.query.filter_by(id=todo_id).update(data)
         db.session.commit()
-        return '', 204
+        return ('No item found', 404) if items_updated == 0 else ('', 204)
 
     def delete(self, todo_id):
         todo_item = TodoModel.query.get_or_404(todo_id)
